@@ -546,8 +546,12 @@ void drawDepthUI(){
 }
 
 void drawTimerUI(){
-	String timeString =nf(floor(gameTimer/3600),2);// Requirement #4: Get the mm:ss string using String convertFramesToTimeString(int frames)
-  String timeSecond =nf((gameTimer/60)%60,2);
+  int min=floor(gameTimer/3600);
+  int sec=gameTimer/60%60;
+  if(sec==60) sec=0;
+  
+	String timeString =nf(min,2);     // Requirement #4: Get the mm:ss string using String convertFramesToTimeString(int frames)
+  String timeSecond =nf(sec,2);
 
 	textAlign(LEFT, BOTTOM);
 
