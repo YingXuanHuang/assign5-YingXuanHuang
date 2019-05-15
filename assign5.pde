@@ -200,6 +200,14 @@ void initClocks(){
   for(int i = 0; i < clockX.length; i++){
     clockX[i] = SOIL_SIZE * floor(random(SOIL_COL_COUNT));
     clockY[i] = SOIL_SIZE * ( i * 4 + floor(random(4)));
+    
+    for(int j=0; j<clockX.length; j++){
+      if(clockX[j]==cabbageX[j] && clockY[j]==cabbageY[j]){
+        i-=1;
+      }
+      
+    }
+    
   }
 
 
@@ -545,24 +553,18 @@ void drawDepthUI(){
 	text(depthString, width, height);
 }
 
-void drawTimerUI(){
-  int min=floor(gameTimer/3600);
-  int sec=gameTimer/60%60;
-  if(sec==60) sec=0;
-  
-	String timeString =nf(min,2);     // Requirement #4: Get the mm:ss string using String convertFramesToTimeString(int frames)
-  String timeSecond =nf(sec,2);
+void drawTimerUI(){    // Requirement #4: Get the mm:ss string using String convertFramesToTimeString(int frames)
 
 	textAlign(LEFT, BOTTOM);
 
 	// Time Text Shadow Effect - You don't have to change this!
 	fill(0, 120);
-	text(timeString+":"+timeSecond, 3, height + 3);
+	text(convertFramesToTimeString(gameTimer), 3, height + 3);
 
 	// Actual Time Text
 	color timeTextColor = getTimeTextColor(gameTimer); 		// Requirement #5: Get the correct color using color getTimeTextColor(int frames)
 	fill(timeTextColor);
-	text(timeString+":"+timeSecond, 0, height);
+	text(convertFramesToTimeString(gameTimer), 0, height);
 }
 
 void addTime(float seconds){					// Requirement #2 ok
@@ -580,8 +582,14 @@ boolean isHit(float ax, float ay, float aw, float ah, float bx, float by, float 
           }
 }
 
-String convertFramesToTimeString(int frames){	// Requirement #4
-	return "";
+String convertFramesToTimeString(int frames){	// Requirement #4 ok
+
+  int min=floor(frames/3600);
+  int sec=frames/60%60;
+  String timeString =nf(min,2);      
+  String timeSecond =nf(sec,2);
+
+	return timeString+":"+timeSecond;
 }
 
 color getTimeTextColor(int frames){				// Requirement #5
@@ -602,25 +610,31 @@ color getTimeTextColor(int frames){				// Requirement #5
 
 
 int getEnemyIndexByRow(int row){				// Requirement #6
-    
-		// HINT:
-		// - If there's a soldier in that row, return that soldier's index in soldierX/soldierY
-		// (for example, if soldierY[3] is in that row, return 3)
-		// - Return -1 if there's no soldier in that row
 
-	return -1;
+    if((row+5)*SOIL_SIZE==soldierY[0]){
+      return 0;
+    }else if((row+5)*SOIL_SIZE==soldierY[1]){
+      return 1;
+      }else if((row+5)*SOIL_SIZE==soldierY[2]){
+      return 2;
+      }else if((row+5)*SOIL_SIZE==soldierY[3]){
+      return 3;
+      }else if((row+5)*SOIL_SIZE==soldierY[4]){
+      return 4;
+      }else if((row+5)*SOIL_SIZE==soldierY[5]){
+      return 5;
+    }else{
+      return -1;
+    }
+    
 }
 
 void drawCaution(){								// Requirement #6
-    for(int i =0;i<soldierX.length;i++){
-    image(caution,soldierX[i],soldierY[i]-SOIL_SIZE);
-    }
-	  // Draw a caution sign above the enemy under the screen using int getEnemyIndexByRow(int row)
 
-		// HINT:
-		// - Use playerRow to calculate the row below the screen
-		// - Use the returned value from int getEnemyIndexByRow(int row) to get the soldier's position from soldierX/soldierY arrays
-		// - Don't draw anything if int getEnemyIndexByRow(int row) returns -1
+    if(getEnemyIndexByRow(playerRow)!=-1){
+    image(caution,soldierX[getEnemyIndexByRow(playerRow)],soldierY[getEnemyIndexByRow(playerRow)]-SOIL_SIZE);
+    }
+    
 }
 
 void keyPressed(){
