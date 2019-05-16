@@ -600,7 +600,7 @@ color getTimeTextColor(int frames){				// Requirement #5
     return #ffcc00 ;
   }else if(frames<1800 && frames>=600){
     return #ff6600 ;
-  }else if(frames<600 && frames>0){
+  }else if(frames<600){
     return #ff0000 ;
   }else{
     return #00ffff ;
